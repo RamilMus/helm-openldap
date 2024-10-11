@@ -35,6 +35,36 @@ ingress:
   #   hosts:
   #   - ssl-ldap.local
 
+serviceAccountName: openldap
+
+podSecurityContext:
+  enabled: false
+containerSecurityContext:
+  enabled: false
+
+## Enable the Nginx sidecar
+nginxSidecar:
+  enabled: true
+  image: nginxinc/nginx-unprivileged:1.25
+  containerSecurityContext:
+    enabled: false
+  volumeMounts:
+    - name: tmp
+      mountPath: /tmp
+  resources: {}
+
+## Configure liveness and readiness probes
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/
+##
+readinessProbe:
+  httpGet:
+    path: /
+    port: http
+livenessProbe:
+   httpGet:
+     path: /
+     port: http
+
 # -- Init containers to add to the pod
 ## Note: Supports use of custom Helm templates
 initContainers: []

@@ -19,6 +19,23 @@ image:
   pullPolicy: IfNotPresent
   pullSecrets: []
 
+serviceAccountName: openldap
+podSecurityContext:
+  enabled: false
+containerSecurityContext:
+  enabled: false
+
+
+## Enable the Nginx sidecar
+nginxSidecar:
+  enabled: true
+  image: nginxinc/nginx-unprivileged:1.25
+  containerSecurityContext:
+    enabled: false
+  volumeMounts:
+    - name: tmp
+      mountPath: /tmp
+  resources: {}
 
 ## Enable persistence using Persistent Volume Claims
 ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
